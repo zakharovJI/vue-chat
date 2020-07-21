@@ -1,0 +1,171 @@
+<template>
+  <div
+      class="brand-input"
+      :class="{'brand-input_focused': stateFocused,
+    'brand-input_filled': stateFilled || selfValue,
+    'brand-input_textarea': type === 'textarea'}"
+  >
+    <label v-if="type === 'textarea'">
+      <textarea
+        class="brand-input__input"
+        v-model="selfValue"
+        :name="name"
+        :type="type"
+        :placeholder="label"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+        autocomplete="off"
+        ref="inputField"
+      ></textarea>
+    </label>
+    <label v-else>
+      <span class="brand-input__label">
+        {{ label }}
+      </span>
+      <input
+        class="brand-input__field"
+        v-model="selfValue"
+        :name="name"
+        @focus="onFocus"
+        @blur="onBlur"
+        @input="onInput"
+        autocomplete="off"
+        ref="inputField"
+      />
+    </label>
+  </div>
+</template>
+<script lang="ts">
+  import {Component, Prop, Emit, Vue} from 'vue-property-decorator';
+
+  @Component
+  export default class BrandInput extends Vue {
+
+    @Prop({required: true}) name!: string;
+    @Prop({required: true}) label!: string;
+    @Prop({required: true}) type!: string;
+    @Prop({default: ''}) value!: string;
+
+    selfValue = this.value;
+
+    stateFilled = false;
+    stateFocused = false;
+
+    @Emit()
+    onFocus() {
+      this.stateFocused = true;
+    }
+
+    @Emit()
+    onBlur() {
+      this.stateFocused = false;
+    }
+
+    @Emit()
+    onInput(e: Event) {
+      this.stateFilled = !!this.selfValue;
+
+      return (<HTMLInputElement>e.target).value;
+    }
+  }
+</script>
+<style lang="scss">
+  .brand-input {
+    $self: &;
+
+    background-color: white;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    color: $primary-font-color;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: text;
+    border: 1px solid $primary-border-color;
+
+    #{$self}__control {
+      height: 100%;
+      cursor: text;
+    }
+
+    #{$self}__label {
+      position: absolute;
+      font-size: 16px;
+      line-height: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding-left: 16px;
+      transition: all .25s linear;
+      transform-origin: left;
+      color: inherit;
+      cursor: inherit;
+      pointer-events: none;
+    }
+
+    #{$self}__field {
+      width: 100%;
+      height: 100%;
+      min-height: 60px;
+      font-weight: inherit;
+      font-size: inherit;
+      padding-left: 16px;
+      background-color: inherit;
+      padding-top: 15px;
+      color: $black;
+      cursor: inherit;
+      border: none;
+
+      &[readonly] {
+        background-color: rgba(0, 0, 0, 0.01);
+        box-shadow: inset -1px 0 0 0 #F2F2F2;
+        cursor: default;
+      }
+    }
+
+    #{$self}__icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 16px;
+      color: inherit;
+
+      &_delete {
+        margin-right: 16px;
+        margin-left: auto;
+        z-index: 20;
+        cursor: pointer;
+      }
+    }
+
+    &_focused, &_filled {
+
+      #{$self}__control {
+        cursor: text;
+      }
+
+      #{$self}__label {
+        font-size: 12px;
+        transform: translateY(-140%);
+      }
+    }
+
+    &_textarea {
+      border: none;
+      height: max-content;
+      border-radius: 0;
+
+      & #{$self}__input {
+        border: 1px solid $primary-border-color;
+        border-radius: 2px;
+        width: 100%;
+        min-height: 98px;
+        max-height: 200px;
+        padding: 17px;
+
+        &::placeholder {
+          color: $primary-font-color;
+        }
+      }
+    }
+  }
+</style>
