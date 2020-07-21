@@ -1,0 +1,25 @@
+$white: #FFFFFF;
+$light: #F2F2F2;
+$dark-white: #FBFBFB;
+$light-gray: #C4C4C4;
+$transparent-black: transparentize(#000, .95);
+$transparent-black_dark: transparentize(#000, .6);
+$black: #000000;
+$gray: #999999;
+$ultra-light-gray: rgba(255,255,255,0.16);
+$blue: #003c79;
+$light-blue: #56AAFF;
+$red: #ff175b;
+
+$primary-border-color: $light;
+$primary-font-color: $gray;
+$secondary-font-color: $light-gray;
+$primary-blue: $blue;
+$secondary-blue: $light-blue;
+$bg-color: $dark-white;
+$transparent-bg: $transparent-black;
+$transparent-bg_dark: $transparent-black_dark;
+$error-color: $red;
+
+$base-interval: .25s;
+$base-radius: 5px;
