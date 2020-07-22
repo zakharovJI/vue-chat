@@ -6,6 +6,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    hui: {
+      aasdasd: 2134314
+    }
   },
   mutations: {
   },

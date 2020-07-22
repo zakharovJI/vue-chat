@@ -1,26 +1,11 @@
 export default class User {
-  private _image: string;
-  private _login: string;
+  avatar: string;
+  login: string;
+  id: number;
 
-  constructor(image: string, login: string) {
-    this._image = image;
-    this._login = login;
+  constructor(image: string, login: string, id: number) {
+    this.avatar = image;
+    this.login = login;
+    this.id = id;
   }
-
-  get image(): string {
-    return this._image;
-  }
-
-  set image(value: string) {
-    this._image = value;
-  }
-
-  get login(): string {
-    return this._login;
-  }
-
-  set login(value: string) {
-    this._login = value;
-  }
-
 }

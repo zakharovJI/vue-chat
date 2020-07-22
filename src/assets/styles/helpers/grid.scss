@@ -58,6 +58,7 @@ $fields_xs: 15px;
   @include xl-block() {
     padding-left: $fields_xl;
     padding-right: $fields_xl;
+    max-width: $container-lg;
   }
   @include hd-block() {
     padding-left: $fields;

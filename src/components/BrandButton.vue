@@ -4,7 +4,7 @@
     :class="{'brand-button_loading' : stateLoading}"
     :type="type"
     :disabled="disabled"
-    @click="onClick()"
+    @click="onClick"
   >
     {{ label }}
   </button>
@@ -16,19 +16,18 @@
   export default class BrandButton extends Vue {
     @Prop({
       required: true,
-    }) label!: string;
+    }) private label!: string;
     @Prop({
       required: false,
       default: ''
-    }) type!: string;
+    }) private type!: string;
     @Prop({
       required: false,
       default: false
-    }) disabled!: boolean;
+    }) private disabled!: boolean;
 
-    @Emit()
-    onClick() {
-
+    onClick(e: Event) {
+      this.$emit('click', e)
     }
 
     private stateLoading: boolean = false;

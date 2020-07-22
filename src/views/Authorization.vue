@@ -6,6 +6,10 @@
         <h2 class="authorization__subtitle">Введите логин и вставьте ссылку на свой аватар</h2>
         <form class="authorization__inputs"
               id="auth_form"
+              method="POST"
+              action="https://www.asdasda.as"
+              @submit.prevent="submitForm"
+              ref="authForm"
         >
           <brand-input
             class="authorization__input"
@@ -24,8 +28,10 @@
         </form>
         <brand-button
           class="authorization__submit"
+          type="submit"
           label="Войти"
           for="auth_form"
+          @click="submitForm"
         >
         </brand-button>
       </div>
@@ -36,6 +42,7 @@
   import {Component, Vue} from 'vue-property-decorator';
   import BrandInput from "@/components/BrandInput.vue";
   import BrandButton from "@/components/BrandButton.vue";
+  import User from "@/types/User"
 
   @Component({
     components: {
@@ -45,6 +52,17 @@
   })
   export default class Authorization extends Vue {
 
+    submitForm(): void {
+      const form = <HTMLFormElement>this.$refs.authForm;
+      const data = new FormData(form);
+      const id = this.$store.getters.getUserFreeId;
+      const user = new User(<string>data.get('avatar'), <string>data.get('login'), id);
+
+      this.$store.dispatch('setCurrentUser', user)
+        .then(() => {
+          this.$router.push('/');
+        })
+    }
   }
 </script>
 <style lang="scss">

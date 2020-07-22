@@ -42,15 +42,15 @@
   @Component
   export default class BrandInput extends Vue {
 
-    @Prop({required: true}) name!: string;
-    @Prop({required: true}) label!: string;
-    @Prop({required: true}) type!: string;
-    @Prop({default: ''}) value!: string;
+    @Prop({required: true}) private name!: string;
+    @Prop({required: true}) private label!: string;
+    @Prop({required: true}) private type!: string;
+    @Prop({default: ''}) private value!: string;
 
     selfValue = this.value;
 
-    stateFilled = false;
-    stateFocused = false;
+    private stateFilled = false;
+    private stateFocused = false;
 
     @Emit()
     onFocus() {
@@ -151,16 +151,24 @@
 
     &_textarea {
       border: none;
-      height: max-content;
+      height: 100%;
       border-radius: 0;
 
       & #{$self}__input {
-        border: 1px solid $primary-border-color;
+        border: none;
         border-radius: 2px;
         width: 100%;
-        min-height: 98px;
-        max-height: 200px;
-        padding: 17px;
+        max-height: 60px;
+        height: 60px;
+        background-color: inherit;
+        resize: none;
+        padding: 5px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        scrollbar-width: none;
+        -ms-overflow-style: none;
 
         &::placeholder {
           color: $primary-font-color;
