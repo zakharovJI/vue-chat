@@ -40,7 +40,7 @@
     border-right: 1px solid $primary-border-color;
 
     @include xs-block() {
-      width: 70px;
+      width: 60px;
     }
   }
 </style>

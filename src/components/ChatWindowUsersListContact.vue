@@ -37,7 +37,7 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    height: 70px;
+    height: 60px;
     background-color: $dark-white;
     border-bottom: 1px solid $primary-border-color;
     cursor: pointer;
@@ -48,8 +48,8 @@
     }
 
     &__avatar-wrapper {
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       overflow: hidden;
     }
