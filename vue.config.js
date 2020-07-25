@@ -2,6 +2,9 @@ const path = require('path');
 
 module.exports = {
   productionSourceMap: process.env.NODE_ENV !== 'production',
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/vue-chat/'
+    : '/',
   css: {
     loaderOptions: {
       sass: {
