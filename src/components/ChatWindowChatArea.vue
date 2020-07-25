@@ -76,8 +76,6 @@
         this.$nextTick(() => {
           const el = this.$refs.chatBlock;
 
-          console.log(el)
-
           el.scrollTo({
             top: el.scrollHeight,
             // behavior: 'smooth'
