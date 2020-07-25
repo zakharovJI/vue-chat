@@ -1,46 +1,55 @@
 <template>
   <div class="chat-window">
     <chat-window-users-list
-      :userList="userListToShow"
+      :userList="userList"
+      @contact-selected="changeDestinationId"
     />
-    <chat-window-chat-area />
+    <chat-window-chat-area
+      :sourceId="sourceId"
+      :destinationId="destinationId"
+    />
   </div>
 </template>
 
-<script lang="ts">
-  import {Component, Prop, Vue} from "vue-property-decorator"
-
+<script>
   import "@/assets/symbols/send.svg"
-  import { Message } from "@/types/types"
   import ChatWindowUsersList from "@/components/ChatWindowUsersList.vue";
   import ChatWindowChatArea from "@/components/ChatWindowChatArea.vue";
-  import Contact from "@/types/Contact";
+  import {createNamespacedHelpers} from "vuex"
 
-  @Component({
+  const {mapState} = createNamespacedHelpers('user');
+
+  export default {
+    name: 'ChatWindow',
     components: {
-      ChatWindowChatArea: ChatWindowChatArea,
-      ChatWindowUsersList: ChatWindowUsersList,
+      ChatWindowChatArea,
+      ChatWindowUsersList,
+    },
+    props: {
+      sourceId: {
+        type: Number,
+        required: true
+      },
+    },
+    data() {
+      return {
+        user: null,
+        destinationId: null
+      }
     },
     computed: {
-      userList() {
-        return this.$store.getters['getUserList']
-      },
-      userListToShow() {
-        const list: Array<Contact> = [];
-        // @ts-ignore
-        this.userList.forEach(user => {
-          list.push(new Contact(user, <Message> {
-            message: 'Да, было здорово!',
-            time: '17:37'
-          }))
-        });
-
-        return list;
+      ...mapState([
+        'userList'
+      ])
+    },
+    mounted() {
+      this.user = this.$store.getters['user/getUserById'](this.sourceId);
+    },
+    methods: {
+      changeDestinationId(destinationId) {
+        this.destinationId = +destinationId;
       }
     }
-  })
-  export default class ChatWindow extends Vue {
-    @Prop({required: true}) private user
   }
 
 </script>
@@ -50,20 +59,6 @@
     $self: &;
 
     display: flex;
-
-    &__start {
-      display: flex;
-      flex-direction: column;
-      width: calc(100% / 12 * 5);
-      border-right: 1px solid $primary-border-color;
-    }
-
-    &__end {
-      width: calc(100% / 12 * 7);
-      border-right: 1px solid $primary-border-color;
-      display: flex;
-      flex-direction: column;
-    }
 
     &__chat-block {
       flex: 1;

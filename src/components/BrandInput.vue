@@ -36,38 +36,49 @@
     </label>
   </div>
 </template>
-<script lang="ts">
-  import {Component, Prop, Emit, Vue} from 'vue-property-decorator';
+<script >
+  export default {
+    name: 'BrandInput',
+    props: {
+      name: {
+        type: String,
+        required: true
+      },
+      label: {
+        type: String,
+        required: true
+      },
+      type: {
+        type: String,
+        required: true
+      },
+      value: {
+        type: String,
+        required: false,
+        default: ''
+      },
+    },
+    data() {
+      return {
+        selfValue: this.value,
+        stateFilled: false,
+        stateFocused: false,
+      }
+    },
+    methods: {
+      onFocus() {
+        this.stateFocused = true;
+      },
+      onBlur() {
+        this.stateFocused = false;
+      },
+      onInput(e) {
+        this.stateFilled = !!this.selfValue;
 
-  @Component
-  export default class BrandInput extends Vue {
-
-    @Prop({required: true}) private name!: string;
-    @Prop({required: true}) private label!: string;
-    @Prop({required: true}) private type!: string;
-    @Prop({default: ''}) private value!: string;
-
-    selfValue = this.value;
-
-    private stateFilled = false;
-    private stateFocused = false;
-
-    @Emit()
-    onFocus() {
-      this.stateFocused = true;
+        return e.target.value;
+      }
     }
 
-    @Emit()
-    onBlur() {
-      this.stateFocused = false;
-    }
-
-    @Emit()
-    onInput(e: Event) {
-      this.stateFilled = !!this.selfValue;
-
-      return (<HTMLInputElement>e.target).value;
-    }
   }
 </script>
 <style lang="scss">

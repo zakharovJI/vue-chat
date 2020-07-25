@@ -4,17 +4,13 @@
     <router-view />
   </div>
 </template>
-<script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
+<script>
   import TheHeader from "@/components/TheHeader.vue";
-
-  @Component({
+  export default {
+    name: 'App',
     components: {
       TheHeader
     }
-  })
-  export default class Authorization extends Vue {
-
   }
 </script>
 

@@ -1,7 +1,14 @@
 <template>
   <div class="chat-window-chat-area">
     <div class="chat-window-chat-area__chat-block">
-
+      <chat-window-chat-area-message
+        v-for="message in messageList"
+        :key="message.message"
+        :userMessage="{
+          user: $store.getters['user/getUserById'](message.sourceId),
+          message
+        }"
+      />
     </div>
     <div class="chat-window-chat-area__text-block">
       <brand-input
@@ -9,8 +16,11 @@
         type="textarea"
         label="Введите сообщение..."
         name="message"
+        ref="messageInput"
       />
-      <div class="chat-window-chat-area__send">
+      <div class="chat-window-chat-area__send"
+         @click="sendMessage()"
+      >
         <svg class="chat-window-chat-area__icon">
           <use xlink:href="#send"/>
         </svg>
@@ -19,28 +29,53 @@
   </div>
 </template>
 
-<script lang="ts">
-  import {Component, Vue} from "vue-property-decorator"
-
+<script>
   import "@/assets/symbols/send.svg"
-  import ChatWindowUserRow from "@/components/ChatWindowUserRow.vue"
-  import BrandInput from "@/components/BrandInput.vue";
-  import BrandButton from "@/components/BrandButton.vue";
+  import ChatWindowUserRow from "@/components/ChatWindowChatAreaMessage.vue"
+  import ChatWindowChatAreaMessage from "@/components/ChatWindowChatAreaMessage.vue";
 
-  @Component({
+  import { mapState } from "vuex"
+
+  export default {
     components: {
-      BrandButton: BrandButton,
-      BrandInput: BrandInput,
-      ChatWindowUserRow: ChatWindowUserRow
+      ChatWindowChatAreaMessage,
+      ChatWindowUserRow
+    },
+    props: {
+      sourceId: {
+        type: Number,
+        required: true
+      },
+      destinationId: {
+        required: true
+      }
     },
     computed: {
-      user() {
-        return this.$store.getters['getUser']
+      ...mapState({
+        chatMessages: 'messages/chatMessages',
+        userList: 'user/userList'
+      }),
+      messageList() {
+        const params = {sourceId: this.sourceId, destinationId: this.destinationId};
+        return this.$store.getters['messages/getMessageList'](params) || [];
+      }
+    },
+    methods: {
+      sendMessage() {
+        const message = this.$refs.messageInput.selfValue;
+
+        const params = {
+          ownerIds: [this.sourceId, this.destinationId],
+          message: {
+            sourceId: this.sourceId,
+            text: message,
+            time: Date.now()
+          }
+        }
+
+        this.$store.dispatch('messages/addToChatMessages', params);
       }
     }
-  })
-  export default class ChatWindowChatArea extends Vue {
-
   }
 
 </script>
@@ -49,7 +84,7 @@
   .chat-window-chat-area {
     $self: &;
 
-    width: calc(100% / 12 * 7);
+    width: calc(100% / 12 * 8);
     border-right: 1px solid $primary-border-color;
     display: flex;
     flex-direction: column;

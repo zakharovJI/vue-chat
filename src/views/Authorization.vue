@@ -38,30 +38,21 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
-  import BrandInput from "@/components/BrandInput.vue";
-  import BrandButton from "@/components/BrandButton.vue";
-  import User from "@/types/User"
+<script>
+  export default {
+    name: 'Authorization',
+    methods: {
+      submitForm() {
+        const form = this.$refs.authForm;
+        const data = new FormData(form);
+        const id = this.$store.getters['user/getUserFreeId'];
+        const user = new Object({avatar: data.get('avatar'), login: data.get('login'), id});
 
-  @Component({
-    components: {
-      BrandButton,
-      BrandInput
-    }
-  })
-  export default class Authorization extends Vue {
-
-    submitForm(): void {
-      const form = <HTMLFormElement>this.$refs.authForm;
-      const data = new FormData(form);
-      const id = this.$store.getters.getUserFreeId;
-      const user = new User(<string>data.get('avatar'), <string>data.get('login'), id);
-
-      this.$store.dispatch('setCurrentUser', user)
-        .then(() => {
-          this.$router.push('/');
-        })
+        this.$store.dispatch('user/setCurrentUser', user)
+          .then(() => {
+            this.$router.push('/');
+          })
+      }
     }
   }
 </script>

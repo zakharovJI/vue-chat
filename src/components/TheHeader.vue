@@ -4,11 +4,8 @@
   </header>
 </template>
 <script lang="ts">
-  import {Component, Vue} from 'vue-property-decorator';
-
-  @Component
-  export default class Authorization extends Vue {
-
+  export default {
+    name: 'Authorization'
   }
 </script>
 <style lang="scss">

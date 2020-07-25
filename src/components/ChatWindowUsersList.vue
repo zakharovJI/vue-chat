@@ -1,38 +1,42 @@
 <template>
   <div class="chat-window-user-list">
-    <chat-window-user-row
-      v-for="contact in userList"
-      :key="contact.id"
-      :message="contact.message"
-      :user="contact.user"
-    ></chat-window-user-row>
+    <chat-window-users-list-contact
+      v-for="user in userList"
+      :key="user.id"
+      :user="user"
+      @click="contactSelected(user.id)"
+    ></chat-window-users-list-contact>
   </div>
 </template>
 
-<script lang="ts">
-  import {Component, Prop, Vue} from "vue-property-decorator"
-
+<script>
   import "@/assets/symbols/send.svg"
-  import ChatWindowUserRow from "@/components/ChatWindowUserRow.vue"
-  import User from "@/types/User";
+  import ChatWindowUsersListContact from "@/components/ChatWindowUsersListContact.vue";
 
-  @Component({
+  export default {
+    name: 'ChatWindowUsersList',
     components: {
-      ChatWindowUserRow: ChatWindowUserRow
+      ChatWindowUsersListContact
     },
-  })
-  export default class ChatWindowUsersList extends Vue {
-    @Prop({required: true}) private userList!: Array<User>;
-
+    props: {
+      userList: {
+        type: Array,
+        required: true,
+      }
+    },
+    methods: {
+      contactSelected(userId) {
+        this.$emit('contact-selected', userId);
+      }
+    }
   }
-
 </script>
 
 <style lang="scss">
   .chat-window-user-list  {
       display: flex;
       flex-direction: column;
-      width: calc(100% / 12 * 5);
+      width: calc(100% / 12 * 4);
       border-right: 1px solid $primary-border-color;
   }
 </style>

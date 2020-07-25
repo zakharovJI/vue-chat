@@ -2,23 +2,24 @@
   <div class="home">
     <div class="home__wrapper">
       <div class="home__inner">
-        <chat-window/>
-        <chat-window/>
+        <chat-window
+          :sourceId="2"
+        />
+        <chat-window
+          :sourceId="1"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-  import {Component, Vue} from "vue-property-decorator"
+<script>
   import ChatWindow from "@/components/ChatWindow.vue"
-
-  @Component({
+  export default {
+    name: 'Home',
     components: {
       ChatWindow: ChatWindow
-    },
-  })
-  export default class Home extends Vue {
+    }
 
   }
 </script>
