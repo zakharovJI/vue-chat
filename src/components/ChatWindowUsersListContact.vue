@@ -37,7 +37,7 @@
     padding: 10px;
     display: flex;
     justify-content: space-between;
-    height: 80px;
+    height: 70px;
     background-color: $dark-white;
     border-bottom: 1px solid $primary-border-color;
     cursor: pointer;
@@ -68,6 +68,11 @@
       padding-left: 10px;
       text-align: left;
       flex: 1;
+
+      @include xs-block() {
+        display: none;
+
+      }
     }
   }
 </style>

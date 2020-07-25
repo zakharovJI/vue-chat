@@ -1,16 +1,25 @@
 <template>
   <div class="chat-window-chat-area">
     <div class="chat-window-chat-area__chat-block">
-      <chat-window-chat-area-message
-        v-for="message in messageList"
-        :key="message.message"
-        :userMessage="{
-          user: $store.getters['user/getUserById'](message.sourceId),
-          message
-        }"
-      />
+      <template v-if="destinationId">
+        <chat-window-chat-area-message
+          v-for="message in messageList"
+          :key="message.message"
+          :userMessage="{
+            user: $store.getters['user/getUserById'](message.sourceId),
+            message
+          }"
+        />
+      </template>
+      <span
+        v-else
+        class="chat-window-chat-area__text-empty"
+      >Здесь появится чат, когда Вы выберите контакт</span>
     </div>
-    <div class="chat-window-chat-area__text-block">
+    <div
+      v-show="destinationId"
+      class="chat-window-chat-area__text-block"
+    >
       <brand-input
         class="chat-window-chat-area__input"
         type="textarea"
@@ -89,14 +98,33 @@
     display: flex;
     flex-direction: column;
 
-    &__chat-block {
+    @include xs-block() {
+      width: auto;
       flex: 1;
+    }
+
+    &__chat-block {
       display: flex;
       flex-direction: column;
+      flex: 1 1 auto;
+      overflow: auto;
+
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    &__text-empty {
+      font-size: 14px;
+      color: $secondary-font-color;
+      margin: auto;
     }
 
     &__text-block {
-      height: 60px;
+      flex: 0 1 60px;
       margin-top: auto;
       display: flex;
       align-items: center;

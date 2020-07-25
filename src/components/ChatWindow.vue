@@ -1,10 +1,12 @@
 <template>
   <div class="chat-window">
     <chat-window-users-list
+      class="chat-window__chat-window-users-list"
       :userList="userList"
       @contact-selected="changeDestinationId"
     />
     <chat-window-chat-area
+      class="chat-window__chat-window-chat-area"
       :sourceId="sourceId"
       :destinationId="destinationId"
     />
@@ -58,7 +60,25 @@
   .chat-window {
     $self: &;
 
+    width: 50%;
     display: flex;
+
+    @include to-md() {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    &:last-child {
+      .chat-window-chat-area {
+        border-right: none;
+      }
+    }
+
+    &:first-child {
+      @include to-md() {
+        border-bottom: 1px solid $primary-border-color;
+      }
+    }
 
     &__chat-block {
       flex: 1;
@@ -91,12 +111,6 @@
         width: 25px;
         height: 25px;
         color: $primary-blue;
-      }
-    }
-
-    &:last-child {
-      & #{$self}__end {
-        border-right: none;
       }
     }
   }

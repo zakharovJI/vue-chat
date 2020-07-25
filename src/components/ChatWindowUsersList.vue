@@ -34,9 +34,13 @@
 
 <style lang="scss">
   .chat-window-user-list  {
-      display: flex;
-      flex-direction: column;
-      width: calc(100% / 12 * 4);
-      border-right: 1px solid $primary-border-color;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% / 12 * 4);
+    border-right: 1px solid $primary-border-color;
+
+    @include xs-block() {
+      width: 70px;
+    }
   }
 </style>
