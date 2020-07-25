@@ -102,5 +102,11 @@
         border-color: lighten(black, 5%);
       }
     }
+
+    &[disabled] {
+      background-color: $light-gray;
+      border-color: $light-gray;
+      pointer-events: none;
+    }
   }
 </style>

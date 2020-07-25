@@ -21,7 +21,7 @@ const state = {
 const getters = {
   getMessageList: state => params => {
     if (params.sourceId === params.destinationId) {
-      return state.chatMessages.find(x => x.ownerIds[0] === x.ownerIds[1] === params.sourceId)?.messages;
+      return state.chatMessages.find(x => x.ownerIds[0] === x.ownerIds[1] && x.ownerIds[0] === params.sourceId)?.messages;
     } else {
       return state.chatMessages.find(x => x.ownerIds.includes(params.sourceId)
         && x.ownerIds.includes(params.destinationId))?.messages;
@@ -38,8 +38,8 @@ const mutations = {
   },
   ADD_MESSAGE_TO_CHAT_MESSAGES_CHANEL(state, params) {
     if (params.ownerIds[0] === params.ownerIds[1]) {
-      console.log(123123)
-      state.chatMessages.find(x => x.ownerIds[0] == x.ownerIds[1] == params.ownerIds[0]).messages.push(params.message);
+      state.chatMessages.find(x => x.ownerIds[0] === x.ownerIds[1] && x.ownerIds[0] === params.ownerIds[0]).messages
+        .push(params.message);
     } else {
       state.chatMessages.find(x => x.ownerIds.includes(params.ownerIds[0])
         && x.ownerIds.includes(params.ownerIds[1])).messages.push(params.message);
@@ -54,12 +54,16 @@ const actions = {
         commit('ADD_CHANEL_TO_CHAT_MESSAGES', params.ownerIds);
       }
     } else {
-      if (!state.chatMessages.find(x => x.ownerIds[0] === x.ownerIds[1] === params.ownerIds[0])) {
+      if (!state.chatMessages.find(x => x.ownerIds[0] === x.ownerIds[1] && x.ownerIds[0] === params.ownerIds[0])) {
         commit('ADD_CHANEL_TO_CHAT_MESSAGES', params.ownerIds);
       }
     }
 
-    commit('ADD_MESSAGE_TO_CHAT_MESSAGES_CHANEL', params)
+    commit('ADD_MESSAGE_TO_CHAT_MESSAGES_CHANEL', params);
+
+    return new Promise(resolve => {
+      resolve();
+    })
   }
 };
 

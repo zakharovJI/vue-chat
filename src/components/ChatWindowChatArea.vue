@@ -1,6 +1,6 @@
 <template>
   <div class="chat-window-chat-area">
-    <div class="chat-window-chat-area__chat-block">
+    <div class="chat-window-chat-area__chat-block" ref="chatBlock">
       <template v-if="destinationId">
         <chat-window-chat-area-message
           v-for="message in messageList"
@@ -9,6 +9,7 @@
             user: $store.getters['user/getUserById'](message.sourceId),
             message
           }"
+          ref="message"
         />
       </template>
       <span
@@ -25,10 +26,11 @@
         type="textarea"
         label="Введите сообщение..."
         name="message"
+        @input-submit="sendMessage()"
         ref="messageInput"
       />
       <div class="chat-window-chat-area__send"
-         @click="sendMessage()"
+           @click="sendMessage()"
       >
         <svg class="chat-window-chat-area__icon">
           <use xlink:href="#send"/>
@@ -43,7 +45,7 @@
   import ChatWindowUserRow from "@/components/ChatWindowChatAreaMessage.vue"
   import ChatWindowChatAreaMessage from "@/components/ChatWindowChatAreaMessage.vue";
 
-  import { mapState } from "vuex"
+  import {mapState} from "vuex"
 
   export default {
     components: {
@@ -69,6 +71,20 @@
         return this.$store.getters['messages/getMessageList'](params) || [];
       }
     },
+    watch: {
+      messageList: function () {
+        this.$nextTick(() => {
+          const el = this.$refs.chatBlock;
+
+          console.log(el)
+
+          el.scrollTo({
+            top: el.scrollHeight,
+            // behavior: 'smooth'
+          });
+        })
+      }
+    },
     methods: {
       sendMessage() {
         const message = this.$refs.messageInput.selfValue;
@@ -82,7 +98,10 @@
           }
         }
 
-        this.$store.dispatch('messages/addToChatMessages', params);
+        this.$store.dispatch('messages/addToChatMessages', params)
+          .then(() => {
+            this.$refs.messageInput.selfValue = '';
+          })
       }
     }
   }
@@ -108,6 +127,7 @@
       flex-direction: column;
       flex: 1 1 auto;
       overflow: auto;
+      padding-bottom: 15px;
 
       -ms-overflow-style: none;
       scrollbar-width: none;

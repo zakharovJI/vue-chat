@@ -16,6 +16,9 @@
             label="Логин"
             type="text"
             name="login"
+            validation="text"
+            @input="checkValidation"
+            ref="inputLogin"
           >
           </brand-input>
           <brand-input
@@ -23,11 +26,15 @@
             label="Аватар"
             type="text"
             name="avatar"
+            validation="image"
+            @input="checkValidation"
+            ref="inputAvatar"
           >
           </brand-input>
         </form>
         <brand-button
           class="authorization__submit"
+          :disabled="stateDisabled"
           type="submit"
           label="Войти"
           for="auth_form"
@@ -41,6 +48,11 @@
 <script>
   export default {
     name: 'Authorization',
+    data() {
+      return {
+        stateDisabled: true
+      }
+    },
     methods: {
       submitForm() {
         const form = this.$refs.authForm;
@@ -52,8 +64,11 @@
           .then(() => {
             this.$router.push('/');
           })
+      },
+      checkValidation() {
+        this.stateDisabled = !(!this.$refs.inputLogin?.stateInvalid && !this.$refs.inputAvatar?.stateInvalid);
       }
-    }
+    },
   }
 </script>
 <style lang="scss">

@@ -1,8 +1,9 @@
 <template>
   <div
-      class="brand-input"
-      :class="{'brand-input_focused': stateFocused,
+    class="brand-input"
+    :class="{'brand-input_focused': stateFocused,
     'brand-input_filled': stateFilled || selfValue,
+    'brand-input_invalid': stateFocused && stateInvalid,
     'brand-input_textarea': type === 'textarea'}"
   >
     <label v-if="type === 'textarea'">
@@ -15,6 +16,7 @@
         @focus="onFocus"
         @blur="onBlur"
         @input="onInput"
+        @keypress.enter.exact.prevent="onInputSubmit()"
         autocomplete="off"
         ref="inputField"
       ></textarea>
@@ -30,6 +32,7 @@
         @focus="onFocus"
         @blur="onBlur"
         @input="onInput"
+        @keypress.enter.exact.prevent="onInputSubmit()"
         autocomplete="off"
         ref="inputField"
       />
@@ -57,12 +60,23 @@
         required: false,
         default: ''
       },
+      validation: {
+        type: String,
+        required: false,
+        default: ''
+      },
     },
     data() {
       return {
         selfValue: this.value,
         stateFilled: false,
         stateFocused: false,
+        stateInvalid: false,
+      }
+    },
+    mounted() {
+      if (this.validation.length) {
+        this.stateInvalid = true;
       }
     },
     methods: {
@@ -75,8 +89,27 @@
       onInput(e) {
         this.stateFilled = !!this.selfValue;
 
-        return e.target.value;
-      }
+        if (this.stateFilled && this.validation?.length) {
+          this.stateInvalid = !!(!this.selfValue.length || this.selfValue.length && !this.validateInput());
+        } else if (this.validation?.length) {
+          this.stateInvalid = true;
+        }
+
+        this.$emit('input', e);
+      },
+      onInputSubmit(e) {
+        this.$emit('input-submit', e);
+      },
+      validateInput() {
+        switch (this.validation) {
+          case 'text':
+            return !!this.selfValue.length;
+          case 'image':
+            return new RegExp('(?:http(s)?:\\/\\/)?([/|.|\\w|\\s|-])*\\.(?:jpg|jpeg|gif|png)').test(this.selfValue.toLowerCase());
+          default:
+            return true
+        }
+      },
     }
 
   }
@@ -184,6 +217,12 @@
         &::placeholder {
           color: $primary-font-color;
         }
+      }
+    }
+
+    &_invalid {
+      & #{$self}__label {
+        color: $error-color;
       }
     }
   }
